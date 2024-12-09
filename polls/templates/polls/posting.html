@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>게시글 개별 페이지</title>
+        <style>
+            textarea[readonly] {
+                background-color: #f0f0f0; 
+                cursor: not-allowed; 
+                border: 1px solid #ccc;
+            }
+
+            /* 댓글 입력 영역 스타일 */
+            .comment_inbox {
+                margin-top: 20px;
+                padding: 15px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                background-color: #f9f9f9;
+            }
+
+            .comment_inbox_name {
+                font-weight: bold;
+            }
+
+            .comment_inbox_text {
+                width: 100%;
+                padding: 10px;
+                margin-top: 5px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                resize: none;
+            }
+
+            .comment_list {
+                margin-top: 30px;
+            }
+
+            .comment_item {
+                padding: 10px;
+                margin-bottom: 10px;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .comment_author {
+                font-weight: bold;
+            }
+
+            .comment_content {
+                margin-top: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>게시글 개별 페이지입니다</h1>
+
+        <!-- 게시글 번호 표시 -->
+        <p>게시글 번호: {{ post.pk }}</p>
+
+        <!-- 게시글 제목 및 내용 표시 -->
+        <h2>{{ post.postname }}</h2>
+        <textarea readonly>{{ post.contents }}</textarea>
+        <hr>
+        
+        <!-- 게시글에 사진이 있으면 출력 -->
+        {% if post.mainphoto %}
+            <img src="{{ post.mainphoto.url }}" alt="게시글 사진" height="600">
+            <br>
+        {% endif %}
+
+        <!-- 게시글 수정 폼 -->
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}  <!-- 폼을 HTML로 렌더링 -->
+            <button type="submit">수정</button>
+        </form>
+
+        <!-- 수정 취소 링크 -->
+        <a href="{% url 'polls:posting' pk=post.pk %}">
+            <button type="button">수정 취소</button>
+        </a>
+        <hr>
+
+        <!-- 게시글 삭제 폼 -->
+        <h3>게시글 삭제</h3>
+        <form method="POST">
+            {% csrf_token %}
+            <p>{{ post.contents }}</p>  <!-- 삭제할 게시글의 내용 출력 -->
+            <button type="submit" name="delete_post" style="color:red;">삭제</button>
+        </form>
+
+        <!-- 목록으로 돌아가기 링크 -->
+        <a href="{% url 'polls:blog' %}">
+            <button type="button">목록으로 돌아가기</button>
+        </a>
+        <hr>
+
+        <!-- 댓글 입력 폼 -->
+        <div class="comment_inbox">
+            <strong class="blind">댓글을 입력하세요</strong>
+            <em class="comment_inbox_name">{{ user.username }}</em> <!-- 댓글 작성자 이름 (예시로 로그인한 사용자 이름 사용) -->
+            <form action="{% url 'polls:posting_detail' pk=post.pk%}" method="POST">
+                {% csrf_token %}
+                <textarea name="content" class="comment_inbox_text" placeholder="댓글을 남겨보세요" rows="3"></textarea>
+                <button type="submit" name="comment">댓글 달기</button>
+            </form>
+        </div>
+
+<!-- 댓글 리스트 출력 -->
+<div class="comments-section">
+    <h3>댓글</h3>
+    {% if comments %}
+        {% for comment in comments %}
+            <div class="comment">
+                <p><strong>{{ comment.name }}</strong> ({{ comment.email }})</p>
+                <p>{{ comment.comment }}</p>
+                <p><small>{{ comment.created_at }}</small></p>
+
+                <!-- 댓글 삭제 버튼 -->
+                <form method="POST" action="{% url 'polls:posting' pk=post.pk %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="comment_id" value="{{ comment.pk }}">
+                    <button type="submit" name="delete_comment">삭제</button>
+                </form>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>댓글이 없습니다.</p>
+    {% endif %}
+</div>
+</body>
+</html>
+
+
+

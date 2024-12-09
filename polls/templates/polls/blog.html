@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Blog List</title>
+    </head>
+    <body>
+        <h1>게시판 페이지</h1>
+
+        <!-- 검색 폼 추가 -->
+        <form method="get" action="">
+            <input type="text" name="q" value="{{ query }}" placeholder="검색어를 입력하세요">
+            <button type="submit">검색</button>
+        </form>
+
+        <!-- 글쓰기 버튼 -->
+        <button><a href="{% url 'polls:new_post' %}">글쓰기</a></button>
+
+        <!-- 게시글 목록 테이블 -->
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>글 번호</th>
+                    <th>제목</th>
+                    <th>수정</th>
+                    <th>삭제</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in postlist %}
+                    <tr>
+                        <td>{{ post.pk }}</td> <!-- 게시글 번호 -->
+                        <td><a href="{% url 'polls:posting' pk=post.pk %}">{{ post.postname }}</a></td>  <!-- 제목 링크 -->
+                        <td><a href="{% url 'polls:posting' pk=post.pk %}">수정</a></td> <!-- 수정 링크 -->
+                        <td><a href="{% url 'polls:remove_post' pk=post.pk %}">삭제</a></td> <!-- 삭제 링크 -->
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">검색된 게시글이 없습니다.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+    </body>
+</html>
+
+
+
+

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ post.postname }}</title>
+</head>
+<body>
+    <h1>{{ post.postname }}</h1>  <!-- 게시글 제목 -->
+    <p><strong>작성일:</strong> {{ post.created_at }}</p>  <!-- 게시글 작성일 -->
+    <p><strong>작성자:</strong> {{ post.author }}</p>  <!-- 작성자 이름 (추가된 경우) -->
+    
+    <div>
+        <h2>내용:</h2>
+        <p>{{ post.contents }}</p>  <!-- 게시글 내용 -->
+    </div>
+
+    <a href="/blog/">목록으로 돌아가기</a>  <!-- 블로그 목록 페이지로 돌아가기 -->
+
+    {% if post.mainphoto %}
+        <div>
+            <h3>사진:</h3>
+            <img src="{{ post.mainphoto.url }}" alt="{{ post.postname }}" width="600px">  <!-- 게시글 사진 (있는 경우) -->
+        </div>
+    {% endif %}
+</body>
+</html>

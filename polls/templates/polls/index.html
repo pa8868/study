@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <form action="" method="post">
+            <h1> 입력된 계정 정보 </h1>
+            {% csrf_token %}
+            <p>Email: {{ request.session.email }}</p> 
+            <p>name: {{ request.session.name }}</p> 
+            <button type="submit" value="세션삭제1" name="action">세션 삭제 후 뒤로가기 login1</button>
+            <button type="submit" value="세션삭제2" name="action">세션 삭제 후 뒤로가기 login2</button>
+        </form>
+    </body>
+</html>

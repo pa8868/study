@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>글 삭제</title>
+</head>
+<body>
+    <form method="POST">
+        {% csrf_token %}
+        <h3>{{ Post.postname }} - 삭제하기</h3>
+        <p>{{ Post.contents }}</p> 
+        <button type="submit">삭제</button> 
+    </form>
+    <a href="{% url 'polls:blog' %}">목록으로 돌아가기</a>
+</body>
+</html>
